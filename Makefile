@@ -2,6 +2,12 @@ PG_USER=postgres
 PG_PASSWORD=postgres
 PG_DB=film_library	
 
+test:
+	go test -v --count=1 ./...
+
+cover:
+	go test -v --count=1 ./... -coverprofile=coverage
+	go tool cover -html=coverage
 
 db-start:
 	@echo "Starting the database..."
@@ -30,4 +36,5 @@ migrate-reset: migrate-down migrate-up
 testdata:
 	@docker exec -it postgres psql -U $(PG_USER) -d $(PG_DB) -f /testdata/testdata.sql  
 	
-	
+clean:
+	rm -rf coverage
