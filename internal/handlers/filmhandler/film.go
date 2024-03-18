@@ -6,6 +6,7 @@ import (
 	"film_library/internal/domains"
 	"film_library/internal/handlers/response"
 	"film_library/internal/repositories/postgres/filmrepo"
+	"film_library/internal/services/filmservice"
 	"film_library/pkg/pagination"
 	"film_library/pkg/validation"
 	"io"
@@ -268,20 +269,20 @@ func (h *FilmHandler) UpdateFilmRating(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	rating, err := time.Parse(time.DateOnly, r.PathValue("rating"))
+	rating, err := strconv.Atoi(r.PathValue("rating"))
 	if err != nil {
-		response.JSONError(w, http.StatusBadRequest, "invalid date", h.log)
+		response.JSONError(w, http.StatusBadRequest, "bad request", h.log)
 		return
 	}
 
-	err = h.service.UpdateFilmReleaseDate(uint32(id), rating)
+	err = h.service.UpdateFilmRating(uint32(id), rating)
 	if err != nil {
 		if errors.Is(err, filmrepo.ErrNotFound) {
 			response.JSONError(w, http.StatusBadRequest, "actor not found", h.log)
 			return
 		}
-		if errors.Is(err, filmrepo.ErrInvalidRating) {
-			response.JSONError(w, http.StatusInternalServerError, "invalid rating", h.log)
+		if errors.Is(err, filmservice.ErrInvalidRating) {
+			response.JSONError(w, http.StatusBadRequest, "invalid rating", h.log)
 			return
 		}
 		response.JSONError(w, http.StatusInternalServerError, "unknown error", h.log)
@@ -321,7 +322,7 @@ func (h *FilmHandler) UpdateFilm(w http.ResponseWriter, r *http.Request) {
 	film := domains.Film{}
 	err = json.Unmarshal(b, &film)
 	if err != nil {
-		response.JSONError(w, http.StatusBadRequest, "bad request kurwa", h.log)
+		response.JSONError(w, http.StatusBadRequest, "bad request", h.log)
 		return
 	}
 
