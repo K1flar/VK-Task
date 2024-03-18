@@ -7,7 +7,7 @@ CREATE TABLE actors(
 
 CREATE TABLE films(
 	id SERIAL PRIMARY KEY,
-	name VARCHAR(150) CHECK(length(name)>0) NOT NULL,
+	name VARCHAR(150) CHECK(length(name)>0) UNIQUE NOT NULL,
 	description VARCHAR(1000),
 	release_date DATE NOT NULL,
 	rating SMALLINT CHECK(rating BETWEEN 0 AND 10) NOT NULL

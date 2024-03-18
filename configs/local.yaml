@@ -1,0 +1,26 @@
+env: "local"
+
+server:
+  host: "localhost"
+  port: 8080
+
+database:
+  host: "localhost"
+  port: 5432
+  name: "film_library"
+  user: "postgres"
+  sslmode: "disable"
+
+identity: 
+  minLoginLen: 1
+  maxLoginLen: 100
+  minPasswordLen: 6
+  maxPasswordLen: 1024
+
+filmValidations:
+  minNameLen: 1
+  maxNameLen: 100
+  minDescriptionLen: 0
+  maxDescriptionLen: 1000
+  minRating: 0
+  maxRating: 10

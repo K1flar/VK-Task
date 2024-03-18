@@ -1,0 +1,761 @@
+basePath: /
+definitions:
+  domains.Actor:
+    properties:
+      birthday:
+        format: "2006-01-02"
+        type: string
+      fullName:
+        type: string
+      gender:
+        type: string
+      id:
+        type: integer
+    type: object
+  domains.ActorWithFilms:
+    properties:
+      birthday:
+        format: "2006-01-02"
+        type: string
+      films:
+        items:
+          $ref: '#/definitions/domains.Film'
+        type: array
+      fullName:
+        type: string
+      gender:
+        type: string
+      id:
+        type: integer
+    type: object
+  domains.Film:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      rating:
+        type: integer
+      releaseDate:
+        format: "2006-01-02"
+        type: string
+    type: object
+  domains.User:
+    properties:
+      id:
+        type: integer
+      login:
+        type: string
+      password:
+        type: string
+      role:
+        type: string
+    type: object
+  filmhandler.InputCreateFilm:
+    properties:
+      actorsID:
+        items:
+          type: integer
+        type: array
+      film:
+        $ref: '#/definitions/domains.Film'
+    type: object
+  filmhandler.InputDescription:
+    properties:
+      description:
+        type: string
+    type: object
+  response.ErrorReponse:
+    properties:
+      error:
+        type: string
+    type: object
+  response.ErrorsReponse:
+    properties:
+      errors:
+        items:
+          type: string
+        type: array
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: This is a VK task.
+  title: Swagger Film library
+  version: "1.0"
+paths:
+  /api/actor:
+    post:
+      consumes:
+      - application/json
+      description: create actor
+      operationId: create-actor
+      parameters:
+      - description: actor info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/domains.Actor'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorsReponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorReponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Create actor
+      tags:
+      - actor
+  /api/actor/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete actor by id
+      operationId: delete-actor
+      parameters:
+      - description: actor id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorReponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorReponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete actor
+      tags:
+      - actor
+    put:
+      consumes:
+      - application/json
+      description: update actor
+      operationId: update-actor
+      parameters:
+      - description: actor id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: actor info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/domains.Actor'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorsReponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorReponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update actor
+      tags:
+      - actor
+  /api/actor/{id}/{filmID}:
+    delete:
+      consumes:
+      - application/json
+      description: delete actor from film
+      operationId: delete-actor-from-film
+      parameters:
+      - description: actor id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: film id
+        in: path
+        name: filmID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorReponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorReponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete actor from film
+      tags:
+      - actor
+  /api/actor/birthday/{id}/{birthday}:
+    put:
+      consumes:
+      - application/json
+      description: update actor birthday
+      operationId: update-birthday
+      parameters:
+      - description: actor id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: actor birthday
+        format: "2006-01-02"
+        in: path
+        name: birthday
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorReponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorReponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update actor birthday
+      tags:
+      - actor
+  /api/actor/gender/{id}/{gender}:
+    put:
+      consumes:
+      - application/json
+      description: update actor gender
+      operationId: update-gender
+      parameters:
+      - description: actor id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: actor gender
+        in: path
+        name: gender
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorReponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorReponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update actor gender
+      tags:
+      - actor
+  /api/actor/name/{id}/{name}:
+    put:
+      consumes:
+      - application/json
+      description: update actor full name
+      operationId: update-fullname
+      parameters:
+      - description: actor id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: actor full name
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorReponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorReponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update actor full name
+      tags:
+      - actor
+  /api/actors:
+    get:
+      consumes:
+      - application/json
+      description: get actors with films
+      operationId: get-actors
+      parameters:
+      - description: page number
+        in: query
+        name: page
+        type: integer
+      - description: page size
+        in: query
+        name: size
+        type: integer
+      - description: full name contains
+        in: query
+        name: actor
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domains.ActorWithFilms'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorReponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get actors with films
+      tags:
+      - actor
+  /api/actors/{filmID}:
+    post:
+      consumes:
+      - application/json
+      description: add actors to film
+      operationId: add-actors
+      parameters:
+      - description: film id
+        in: path
+        name: filmID
+        required: true
+        type: integer
+      - description: actors id
+        in: body
+        name: input
+        required: true
+        schema:
+          items:
+            type: integer
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorReponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorReponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Add actors to film
+      tags:
+      - actor
+  /api/film:
+    post:
+      consumes:
+      - application/json
+      description: create film
+      operationId: create-film
+      parameters:
+      - description: film and actors info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/filmhandler.InputCreateFilm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorsReponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorReponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Create film
+      tags:
+      - film
+  /api/film/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete film by id
+      operationId: delete-film
+      parameters:
+      - description: film id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorReponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorReponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete film
+      tags:
+      - film
+    put:
+      consumes:
+      - application/json
+      description: update film
+      operationId: update-film
+      parameters:
+      - description: film id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: film info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/domains.Film'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorsReponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorReponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update film
+      tags:
+      - film
+  /api/film/{id}/{rating}:
+    put:
+      consumes:
+      - application/json
+      description: update film rating
+      operationId: update-rating
+      parameters:
+      - description: film id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: film rating
+        in: path
+        name: rating
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorsReponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorReponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update film rating
+      tags:
+      - film
+  /api/film/date/{id}/{date}:
+    put:
+      consumes:
+      - application/json
+      description: update film release date
+      operationId: update-releaseDate
+      parameters:
+      - description: film id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: film release date
+        format: "2006-01-02"
+        in: path
+        name: date
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorReponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorReponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update film release date
+      tags:
+      - film
+  /api/film/description/{id}:
+    put:
+      consumes:
+      - application/json
+      description: update film description
+      operationId: update-description
+      parameters:
+      - description: film id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: actor gender
+        in: body
+        name: description
+        required: true
+        schema:
+          $ref: '#/definitions/filmhandler.InputDescription'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorReponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorReponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update film description
+      tags:
+      - film
+  /api/film/name/{id}/{name}:
+    put:
+      consumes:
+      - application/json
+      description: update film name
+      operationId: update-name
+      parameters:
+      - description: film id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: film name
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorReponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorReponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update film name
+      tags:
+      - film
+  /api/films:
+    get:
+      consumes:
+      - application/json
+      description: get films
+      operationId: get-films
+      parameters:
+      - description: page number
+        in: query
+        name: page
+        type: integer
+      - description: page size
+        in: query
+        name: size
+        type: integer
+      - description: film name contains
+        in: query
+        name: film
+        type: string
+      - description: actor full name contains
+        in: query
+        name: actor
+        type: string
+      - description: films order by
+        in: query
+        name: sort
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domains.Film'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorReponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get films
+      tags:
+      - film
+  /api/login:
+    post:
+      consumes:
+      - application/json
+      description: login user
+      operationId: login
+      parameters:
+      - description: user info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/domains.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorReponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.ErrorReponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorReponse'
+      summary: Login user
+      tags:
+      - user
+  /api/register:
+    post:
+      consumes:
+      - application/json
+      description: create user
+      operationId: create-user
+      parameters:
+      - description: user info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/domains.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorsReponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/response.ErrorReponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorReponse'
+      summary: Create user
+      tags:
+      - user
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
