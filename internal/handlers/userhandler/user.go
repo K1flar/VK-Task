@@ -3,7 +3,6 @@ package userhandler
 import (
 	"encoding/json"
 	"errors"
-	_ "film_library/docs"
 	"film_library/internal/domains"
 	"film_library/internal/handlers/response"
 	"film_library/internal/repositories/postgres/userrepo"

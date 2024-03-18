@@ -42,8 +42,4 @@ VALUES
 
 INSERT INTO users (login, password, role)
 VALUES 
-    ('user1', 'password1', 'viewer'),
-    ('user2', 'password2', 'viewer'),
-    ('denis', 'admin', 'admin'),
-    ('user4', 'password4', 'viewer'),
-    ('user5', 'password5', 'admin');
+    ('admin', '$2a$10$TapsdRWZUU/26uZdj/gpwO4OPf4/0eqxOrlPBZfm3iH74aN5S8l0q', 'admin');
