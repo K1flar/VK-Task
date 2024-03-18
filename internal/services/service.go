@@ -6,7 +6,7 @@ import (
 	"film_library/internal/repositories/postgres"
 	"film_library/internal/services/actorservice"
 	"film_library/internal/services/filmservice"
-	userservicce "film_library/internal/services/userservice"
+	userservice "film_library/internal/services/userservice"
 	"film_library/pkg/pagination"
 	"log/slog"
 	"time"
@@ -55,7 +55,7 @@ type IService interface {
 }
 
 func New(repo postgres.IRepository, log *slog.Logger, cfg *config.Config) IService {
-	userService := userservicce.New(repo, log, cfg)
+	userService := userservice.New(repo, log, cfg)
 	actorService := actorservice.New(repo, log)
 	filmservice := filmservice.New(repo, actorService, log, cfg)
 	return &Service{
