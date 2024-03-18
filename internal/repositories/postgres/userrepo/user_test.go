@@ -38,14 +38,14 @@ func TestUserRepoAdd(t *testing.T) {
 			},
 		},
 		{
-			name: "Alredy exists",
+			name: "Already exists",
 			user: domains.User{Login: "denis", Password: "denis", Role: "admin"},
 			mock: func(user domains.User) {
 				mock.ExpectExec("INSERT INTO users").
 					WithArgs(user.Login, user.Password, user.Role).
 					WillReturnError(&pq.Error{Code: pq.ErrorCode("23505")})
 			},
-			err: ErrAlredyExists,
+			err: ErrAlreadyExists,
 		},
 		{
 			name: "Invalid role",

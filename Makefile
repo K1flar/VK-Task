@@ -2,11 +2,14 @@ PG_USER=postgres
 PG_PASSWORD=postgres
 PG_DB=film_library	
 
+swag:
+	swag init -g cmd/main.go
+
 test:
 	go test -v --count=1 ./...
 
 cover:
-	go test -v --count=1 ./... -coverprofile=coverage
+	go test -v --count=1 ./cmd/... ./internal/... ./pkg/... -coverprofile=coverage
 	go tool cover -html=coverage
 
 db-start:

@@ -9,9 +9,9 @@ import (
 )
 
 var (
-	ErrInvalidRole  = fmt.Errorf("invalid user role")
-	ErrAlredyExists = fmt.Errorf("user alredy exists")
-	ErrNotFound     = fmt.Errorf("user not found")
+	ErrInvalidRole   = fmt.Errorf("invalid user role")
+	ErrAlreadyExists = fmt.Errorf("user already exists")
+	ErrNotFound      = fmt.Errorf("user not found")
 )
 
 type UserRepository struct {
@@ -39,7 +39,7 @@ func (r *UserRepository) AddUser(user domains.User) error {
 			case err.Code == pq.ErrorCode("23514"):
 				return fmt.Errorf("%s: %w", fn, ErrInvalidRole)
 			case err.Code == pq.ErrorCode("23505"):
-				return fmt.Errorf("%s: %w", fn, ErrAlredyExists)
+				return fmt.Errorf("%s: %w", fn, ErrAlreadyExists)
 			}
 		}
 		return fmt.Errorf("%s: %w", fn, err)
