@@ -123,6 +123,7 @@ func (s *FilmService) UpdateFilmRating(id uint32, rating int) error {
 	fn := "filmService.UpdateFilmRating"
 
 	minRating, maxRating := s.cfg.FilmValidations.MinRating, s.cfg.FilmValidations.MaxRating
+	fmt.Println(rating, minRating, maxRating)
 	if rating < minRating || rating > maxRating {
 		s.log.Error(fmt.Sprintf("%s: %s", fn, ErrInvalidRating.Error()))
 		return fmt.Errorf("%s: %w", fn, ErrInvalidRating)

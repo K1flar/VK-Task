@@ -126,14 +126,14 @@ func (r *FilmRepository) UpdateFilmRating(id uint32, rating int) error {
 }
 
 func (r *FilmRepository) UpdateFilm(id uint32, film domains.Film) error {
-	fn := "actorRepository.UpdateFIlm"
+	fn := "actorRepository.UpdateFilm"
 
 	stmt := `
 		UPDATE films
 		SET (name, description, release_date, rating) = ($1, $2, $3, $4)
 		WHERE id=$5;
 	`
-	res, err := r.db.Exec(stmt, film.Name, film.Description, film.ReleaseDate, film.Rating, id)
+	res, err := r.db.Exec(stmt, film.Name, film.Description, time.Time(film.ReleaseDate), film.Rating, id)
 	if err != nil {
 		return fmt.Errorf("%s: %w", fn, err)
 	}

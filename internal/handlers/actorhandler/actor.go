@@ -304,7 +304,7 @@ func (h *ActorHandler) UpdateActor(w http.ResponseWriter, r *http.Request) {
 	actor := domains.Actor{}
 	err = json.Unmarshal(b, &actor)
 	if err != nil {
-		response.JSONError(w, http.StatusBadRequest, "bad request kurwa", h.log)
+		response.JSONError(w, http.StatusBadRequest, "bad request", h.log)
 		return
 	}
 
