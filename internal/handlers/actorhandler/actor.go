@@ -55,7 +55,6 @@ func New(service ActorService, log *slog.Logger) *ActorHandler {
 // @Router /api/actors [get]
 func (h *ActorHandler) GetActorsWithFilms(w http.ResponseWriter, r *http.Request) {
 	filter := pagination.NewActorFilterFromRequest(r)
-
 	actorsWithFilms, err := h.service.GetActorsWithFilms(filter)
 	if err != nil {
 		response.JSONError(w, http.StatusInternalServerError, "unknown error", h.log)
