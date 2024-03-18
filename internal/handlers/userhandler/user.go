@@ -6,7 +6,7 @@ import (
 	"film_library/internal/domains"
 	"film_library/internal/handlers/response"
 	"film_library/internal/repositories/postgres/userrepo"
-	userservicce "film_library/internal/services/userservice"
+	"film_library/internal/services/userservice"
 	"film_library/pkg/validation"
 	"io"
 	"log/slog"
@@ -92,7 +92,7 @@ func (h *UserHandler) Register(w http.ResponseWriter, r *http.Request) {
 func (h *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
 	b, err := io.ReadAll(r.Body)
 	if err != nil {
-		response.JSONError(w, http.StatusInternalServerError, "unknown error", h.log)
+		response.JSONError(w, http.StatusInternalServerError, "unknown error kurwa", h.log)
 		return
 	}
 	defer r.Body.Close()
@@ -106,7 +106,7 @@ func (h *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
 
 	token, err := h.service.Login(user.Login, user.Password)
 	if err != nil {
-		if errors.Is(err, userservicce.ErrNotFound) || errors.Is(err, userservicce.ErrInvalidPassword) {
+		if errors.Is(err, userservice.ErrNotFound) || errors.Is(err, userservice.ErrInvalidPassword) {
 			response.JSONError(w, http.StatusUnauthorized, "invalid login or password", h.log)
 			return
 		}
