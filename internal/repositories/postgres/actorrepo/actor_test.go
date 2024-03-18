@@ -37,7 +37,7 @@ func TestActorRepoAdd(t *testing.T) {
 			actor: domains.Actor{FullName: "Robert Oppenheimer", Gender: "male", Birthday: domains.Time(time.Now())},
 			mock: func(actor domains.Actor) {
 				mock.ExpectExec("INSERT INTO actors").
-					WithArgs(actor.FullName, actor.Gender, actor.Birthday).
+					WithArgs(actor.FullName, actor.Gender, time.Time(actor.Birthday)).
 					WillReturnResult(sqlmock.NewResult(1, 1))
 			},
 		},
@@ -46,7 +46,7 @@ func TestActorRepoAdd(t *testing.T) {
 			actor: domains.Actor{FullName: "denis", Gender: "male2", Birthday: domains.Time(time.Now())},
 			mock: func(actor domains.Actor) {
 				mock.ExpectExec("INSERT INTO actors").
-					WithArgs(actor.FullName, actor.Gender, actor.Birthday).
+					WithArgs(actor.FullName, actor.Gender, time.Time(actor.Birthday)).
 					WillReturnError(&pq.Error{Code: pq.ErrorCode("23514")})
 			},
 			err: ErrInvalidGender,
@@ -56,7 +56,7 @@ func TestActorRepoAdd(t *testing.T) {
 			actor: domains.Actor{FullName: "123", Gender: "123", Birthday: domains.Time(time.Now())},
 			mock: func(actor domains.Actor) {
 				mock.ExpectExec("INSERT INTO actors").
-					WithArgs(actor.FullName, actor.Gender, actor.Birthday).
+					WithArgs(actor.FullName, actor.Gender, time.Time(actor.Birthday)).
 					WillReturnError(customError)
 			},
 			err: customError,
@@ -492,7 +492,7 @@ func TestActorRepoGetActorsWithFilms(t *testing.T) {
 					AddRow(2, "Aboba", "female", time.Now(), 10, "Abobaheimer", "", time.Now(), 9)
 				mock.ExpectQuery(`SELECT a.id, a.full_name, a.gender, a.birthday, 
 					f.id, f.name, f.description, f.release_date, f.rating FROM actors AS a`).
-					WithArgs(strings.ToLower(filter.FullNameContains)).
+					WithArgs(strings.ToLower("%" + filter.FullNameContains + "%")).
 					WillReturnRows(rows)
 			},
 			actorsWithFilms: []*domains.ActorWithFilms{

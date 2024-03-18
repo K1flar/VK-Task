@@ -15,7 +15,7 @@ swag:
 	swag init -g cmd/main.go
 
 test:
-	go test -v --count=1 ./...
+	go test -v --count=1 ./cmd/... ./internal/... ./pkg/...
 
 cover:
 	go test -v --count=1 ./cmd/... ./internal/... ./pkg/... -coverprofile=coverage

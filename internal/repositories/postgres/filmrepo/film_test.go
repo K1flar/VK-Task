@@ -5,7 +5,6 @@ import (
 	"film_library/internal/domains"
 	"film_library/pkg/pagination"
 	"fmt"
-	"strings"
 	"testing"
 	"time"
 
@@ -36,9 +35,10 @@ func TestFilmRepoAdd(t *testing.T) {
 			name: "Correct",
 			film: domains.Film{Name: "Oppenheimer", ReleaseDate: domains.Time(time.Now()), Rating: 10},
 			mock: func(film domains.Film) {
-				mock.ExpectExec("INSERT INTO films").
-					WithArgs(film.Name, film.Description, film.ReleaseDate, film.Rating).
-					WillReturnResult(sqlmock.NewResult(1, 1))
+				rows := sqlmock.NewRows([]string{"id"}).AddRow(1)
+				mock.ExpectQuery("INSERT INTO films").
+					WithArgs(film.Name, film.Description, time.Time(film.ReleaseDate), film.Rating).
+					WillReturnRows(rows)
 			},
 			id: 1,
 		},
@@ -46,8 +46,8 @@ func TestFilmRepoAdd(t *testing.T) {
 			name: "Already exists",
 			film: domains.Film{Name: "Oppenheimer", ReleaseDate: domains.Time(time.Now()), Rating: 10},
 			mock: func(film domains.Film) {
-				mock.ExpectExec("INSERT INTO films").
-					WithArgs(film.Name, film.Description, film.ReleaseDate, film.Rating).
+				mock.ExpectQuery("INSERT INTO films").
+					WithArgs(film.Name, film.Description, time.Time(film.ReleaseDate), film.Rating).
 					WillReturnError(&pq.Error{Code: pq.ErrorCode("23505"), Constraint: "films_name_key"})
 			},
 			err: ErrAlreadyExists,
@@ -56,8 +56,8 @@ func TestFilmRepoAdd(t *testing.T) {
 			name: "Invalid name",
 			film: domains.Film{ReleaseDate: domains.Time(time.Now()), Rating: 10},
 			mock: func(film domains.Film) {
-				mock.ExpectExec("INSERT INTO films").
-					WithArgs(film.Name, film.Description, film.ReleaseDate, film.Rating).
+				mock.ExpectQuery("INSERT INTO films").
+					WithArgs(film.Name, film.Description, time.Time(film.ReleaseDate), film.Rating).
 					WillReturnError(&pq.Error{Code: pq.ErrorCode("23514"), Constraint: "films_name_check"})
 			},
 			err: ErrInvalidNameLength,
@@ -66,8 +66,8 @@ func TestFilmRepoAdd(t *testing.T) {
 			name: "Invalid rating",
 			film: domains.Film{Name: "Barby", ReleaseDate: domains.Time(time.Now()), Rating: -1},
 			mock: func(film domains.Film) {
-				mock.ExpectExec("INSERT INTO films").
-					WithArgs(film.Name, film.Description, film.ReleaseDate, film.Rating).
+				mock.ExpectQuery("INSERT INTO films").
+					WithArgs(film.Name, film.Description, time.Time(film.ReleaseDate), film.Rating).
 					WillReturnError(&pq.Error{Code: pq.ErrorCode("23505"), Constraint: "films_rating_check"})
 			},
 			err: ErrInvalidRating,
@@ -76,8 +76,8 @@ func TestFilmRepoAdd(t *testing.T) {
 			name: "Unknown error",
 			film: domains.Film{Name: "Aboba", ReleaseDate: domains.Time(time.Now()), Rating: 5},
 			mock: func(film domains.Film) {
-				mock.ExpectExec("INSERT INTO films").
-					WithArgs(film.Name, film.Description, film.ReleaseDate, film.Rating).
+				mock.ExpectQuery("INSERT INTO films").
+					WithArgs(film.Name, film.Description, time.Time(film.ReleaseDate), film.Rating).
 					WillReturnError(customError)
 			},
 			err: customError,
@@ -137,7 +137,6 @@ func TestFilmRepoGetFilms(t *testing.T) {
 				rows := sqlmock.NewRows([]string{"id", "name", "description", "release_date", "rating"}).
 					AddRow(1, "Oppenheimer", "", time.Now(), 10)
 				mock.ExpectQuery("SELECT DISTINCT f.id, f.name, f.description, f.release_date, f.rating FROM films AS f").
-					WithArgs(strings.ToLower(filter.ActorNameContains), strings.ToLower(filter.NameContains)).
 					WillReturnRows(rows)
 			},
 			films: []*domains.Film{{ID: 1, Name: "Oppenheimer", ReleaseDate: domains.Time(time.Now()), Rating: 10}},
